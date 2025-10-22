@@ -14,6 +14,7 @@ export interface Song {
     artUrl: string;
     position: number;
     length: number;
+    status: string;
 }
 
 export async function getCurrentSong(): Promise<Song | null> {

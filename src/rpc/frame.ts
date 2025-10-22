@@ -1,10 +1,10 @@
-import type { StatusPayload } from "./payload.ts";
+import type { ClearStatusPayload, StatusPayload } from "./payload.ts";
 
 export class StatusFrame {
     opcode: number = 1; // FRAME
-    payload: StatusPayload;
+    payload: StatusPayload | ClearStatusPayload;
 
-    constructor(payload: StatusPayload) {
+    constructor(payload: StatusPayload | ClearStatusPayload) {
         this.payload = payload;
     }
 

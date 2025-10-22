@@ -1,7 +1,7 @@
 import { getCurrentSong, Song } from "./player/song.ts";
-import { correctArt } from "./player/art.ts";
 import { IPCClient } from "./rpc/ipc.ts";
 import { logger } from "./logger.ts";
+import { Status } from "./rpc/payload.ts";
 
 const CLIENT_ID = "1427168009285275679";
 
@@ -15,16 +15,18 @@ let lastSong: Song = {
     album: "",
     artUrl: lastGoodArt,
     position: 0,
-    length: 0
+    length: 0,
+    status: ""
 }
 
 async function updateStatus() {
     logger("Updating song data...");
     const currentSong = await getCurrentSong();
 
-    if (!currentSong) {
+    if (!currentSong || currentSong.status !+ "Playing") {
         logger("No song detectable");
-        return
+        client.clearStatus();
+        return;
     }
 
     const isFirstSong = lastGoodArt.length == 0 && lastSong.title == ""
@@ -36,15 +38,14 @@ async function updateStatus() {
         logger(`New song: ${currentSong.title} - ${currentSong.artists.join(", ")}`);
     }
     
-    if (isNewSong || isFirstSong) {
-        currentSong.artUrl = lastGoodArt = await correctArt(currentSong.title, currentSong.artists[0])
-    }
-
+    // if (isNewSong || isFirstSong) {
+    //     currentSong.artUrl = lastGoodArt = await correctArt(currentSong.title, currentSong.artists[0])
+    // }
 
     const songStart = Date.now() - currentSong.position;
     const songEnd = songStart + currentSong.length;
     
-    const status = {
+    const status: Status = {
         type: 2,
         name: "Music",
         details: currentSong.title,

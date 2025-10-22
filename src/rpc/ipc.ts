@@ -1,5 +1,5 @@
 import { StatusFrame } from "./frame.ts";
-import { type Status, StatusPayload } from "./payload.ts";
+import { ClearStatusPayload, type Status, StatusPayload } from "./payload.ts";
 
 export class IPCClient {
     private conn?: Deno.Conn;
@@ -55,6 +55,10 @@ export class IPCClient {
 
     public setStatus(status: Status) {
         this.send(new StatusFrame(new StatusPayload(status)));
+    }
+
+    public clearStatus() {
+        this.send(new StatusFrame(new ClearStatusPayload()));
     }
 
     private async send(frame: StatusFrame) {

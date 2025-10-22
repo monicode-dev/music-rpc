@@ -11,7 +11,8 @@
   },
   "tasks": {
     "run": "deno run -P src/main.ts",
-    "compileLinux": "deno compile -Pr --target x86_64-unknown-linux-gnu --output bin/music-rpc src/main.ts"
+    "compileLinux": "deno compile -Pr --target x86_64-unknown-linux-gnu --output bin/music-rpc src/main.ts",
+    "compileWindows": "deno compile -Pr --target x86_64-pc-windows-msvc --output bin/music-rpc src/main.ts"
   },
   "nodeModulesDir": "auto",
   "compile": {

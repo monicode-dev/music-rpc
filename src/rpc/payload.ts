@@ -42,3 +42,17 @@ export class StatusPayload {
         this.nonce = crypto.randomUUID()
     }
 }
+
+export class ClearStatusPayload {
+    public cmd: string = "SET_ACTIVITY"
+    public args: { pid: number }
+    public nonce: `${string}-${string}-${string}-${string}-${string}`
+
+    constructor() {
+        this.args = {
+            pid: Deno.pid,
+        }
+        
+        this.nonce = crypto.randomUUID()
+    }
+}

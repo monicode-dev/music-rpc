@@ -49,6 +49,11 @@ export async function mprisGetSong(): Promise<Song | null> {
             "org.mpris.MediaPlayer2.Player",
             "Metadata",
         );
+
+        const status = await props.Get(
+            "org.mpris.MediaPlayer2.Player",
+            "PlaybackStatus",
+        );
         
         bus.disconnect()
 
@@ -58,7 +63,8 @@ export async function mprisGetSong(): Promise<Song | null> {
             album: meta.value["xesam:album"].value,
             artUrl: meta.value["mpris:artUrl"].value,
             position: Number(pos.value) / 1000,
-            length: Number(meta.value["mpris:length"].value) / 1000
+            length: Number(meta.value["mpris:length"].value) / 1000,
+            status: status.value
         };
     } catch (e) {
         logger(`An error occured getting song data: ${e}`);

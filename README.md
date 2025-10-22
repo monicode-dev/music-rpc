@@ -1,0 +1,1 @@
+# Discord RPC control via JS/TS

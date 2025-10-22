@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "default": {
+      "env": true,
+      "read": true,
+      "write": true,
+      "run": true,
+      "sys": true,
+      "net": true
+    }
+  },
+  "tasks": {
+    "run": "deno run src/main.ts",
+    "compileLinux": "deno compile -Pr --target x86_64-unknown-linux-gnu --output bin/music-rpc src/main.ts"
+  },
+  "nodeModulesDir": "auto",
+  "compile": {
+    "permissions": "default"
+  },
+  "fmt": {
+    "indentWidth": 4
+  },
+  "imports": {
+    "dbus-next": "npm:dbus-next@^0.10.2",
+    "musicbrainz-api": "npm:musicbrainz-api@^0.25.1"
+  }
+}

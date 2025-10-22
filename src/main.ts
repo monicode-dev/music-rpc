@@ -1,6 +1,7 @@
 import { getCurrentSong, Song } from "./player/song.ts";
 import { correctArt } from "./player/art.ts";
 import { IPCClient } from "./rpc/ipc.ts";
+import { logger } from "./logger.ts";
 
 const CLIENT_ID = "1427168009285275679";
 
@@ -18,22 +19,27 @@ let lastSong: Song = {
 }
 
 async function updateStatus() {
-    console.log("Updating song data...");
+    logger("Updating song data...");
     const currentSong = await getCurrentSong();
 
     if (!currentSong) {
-        console.log("No song detectable");
+        logger("No song detectable");
         return
     }
 
+    const isFirstSong = lastGoodArt.length == 0 && lastSong.title == ""
+    const isNewSong = currentSong.title != lastSong.title && currentSong.artUrl.startsWith("file://")
+    
     lastSong = currentSong;
 
-
-    if (lastGoodArt.length == 0 || (currentSong.title != lastSong.title && currentSong.artUrl.startsWith("file://"))) {
-        console.log(`New song: ${currentSong.title} - ${currentSong.artists.join(", ")}`);
-
+    if (isNewSong) {
+        logger(`New song: ${currentSong.title} - ${currentSong.artists.join(", ")}`);
+    }
+    
+    if (isNewSong || isFirstSong) {
         currentSong.artUrl = lastGoodArt = await correctArt(currentSong.title, currentSong.artists[0])
     }
+
 
     const songStart = Date.now() - currentSong.position;
     const songEnd = songStart + currentSong.length;
@@ -50,14 +56,14 @@ async function updateStatus() {
         },
     }
     
-    console.log("Updating activity status...");
+    logger("Updating activity status...");
     
     client.setStatus(status);
 }
 
 
 client.init(CLIENT_ID).then(async () => {
-    console.log("Discord RPC ready!");
+    logger("Discord RPC ready!");
     await updateStatus();
 
     setInterval(() => {

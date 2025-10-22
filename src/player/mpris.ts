@@ -1,3 +1,4 @@
+import { logger } from "../logger.ts";
 import { Song } from "./song.ts";
 import DBus from "dbus-next";
 
@@ -25,7 +26,7 @@ export async function mprisGetSong(): Promise<Song | null> {
     const names = await mprisPlayers();
 
     if (!names) {
-        console.log("No players detectable");
+        logger("No players detectable");
         return null
     }
 
@@ -60,7 +61,7 @@ export async function mprisGetSong(): Promise<Song | null> {
             length: Number(meta.value["mpris:length"].value) / 1000
         };
     } catch (e) {
-        console.log("An error occured getting song data: ", e);
+        logger(`An error occured getting song data: ${e}`);
         
         return null;
     }

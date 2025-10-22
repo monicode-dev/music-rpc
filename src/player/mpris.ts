@@ -8,11 +8,8 @@ async function mprisPlayers(): Promise<string[] | null> {
         stderr: "piped",
     }).spawn();
     
-    const { stdout, stderr } = await proc.output();
-    if (!stdout) {
-        const err = new TextDecoder().decode(stderr);
-        return null
-    }
+    const { stdout } = await proc.output();
+    if (!stdout) return null
 
     const lines = new TextDecoder().decode(stdout).split("\n");
     const names = lines
